@@ -1,0 +1,44 @@
+-----------------------------------------------------------------------------------------------
+@// mainRibbonTapView.xaml
+	
+	<Button  Content="Query 1" Grid.Row="0" Grid.Column="0" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunStdSortQuery}"
+                                    CommandParameter="1">
+                </Button>
+            <Button  Content="Query 2" Grid.Row="0" Grid.Column="1" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunStdSortQuery}"
+                                    CommandParameter="2">
+            </Button>
+            <Button  Content="Query 3" Grid.Row="0" Grid.Column="2" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunStdSortQuery}"
+                                    CommandParameter="3">
+            </Button>
+
+-----------------------------------------------------------------------------------------------
+@// mainRibbonTapViewModel.cs
+	RelayCommand _RunStdSortQuery;
+        public ICommand RunStdSortQuery
+        {
+            get
+            {
+                if (_RunStdSortQuery == null)
+                {
+                    _RunStdSortQuery = new RelayCommand(p => RunStdSort(p),
+                        p => true);
+                }
+                return _RunStdSortQuery;
+            }
+        }
+
+        private async void RunStdSort(object txtSortTemplate)
+        {
+            int sortTemplate = Convert.ToInt32(txtSortTemplate);
+            SortItem sortOrder = sortOrderList.First(i => i.ID == sortTemplate);
+            orderParseDeleg = sortOrder;
+            //orderParseDeleg = SortExpression.BuildOrderBys<RestorationAlarmList>(sortOrder);
+
+            //DateTime exclusiveEnd = DateTime.Now;
+            await RestAlarmsRepo.SGetCustAlarmAct(sortOrder);
+
+            Console.WriteLine(sortOrder.ID);
+        }

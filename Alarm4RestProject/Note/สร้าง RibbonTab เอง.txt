@@ -1,0 +1,167 @@
+
+@@@@@ mainRibbonTabView.xaml
+
+<RibbonTab x:Class="Alarm4Rest_Viewer.CustControl.mainRibbonTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Alarm4Rest_Viewer.CustControl"
+             
+            xmlns:RestorationAlarmLists="clr-namespace:Alarm4Rest_Viewer.RestorationAlarmLists" 
+            xmlns:CustomAlarmLists="clr-namespace:Alarm4Rest_Viewer.CustomAlarmLists" 
+            xmlns:Services="clr-namespace:Alarm4Rest_Viewer.Services"
+            xmlns:CustControl="clr-namespace:Alarm4Rest_Viewer.CustControl" 
+            xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    
+    <RibbonTab.Resources>
+
+        <Services:MultiValueConverter x:Key="MultiValueConverter" />
+    </RibbonTab.Resources>
+
+    <RibbonTab.DataContext>
+        <local:mainRibbonViewModel/>
+        <!--<ViewModel:ViewModelEventAlarm/> -->
+    </RibbonTab.DataContext>
+
+            <!-- Filter  group-->
+            <RibbonGroup x:Name="StdQuery" Header="Standard Query">
+                <Grid DockPanel.Dock ="Top">
+                    <Grid.ColumnDefinitions >
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                </Grid>
+            </RibbonGroup>
+
+    <RibbonGroup x:Name="TimeCondition" Header="Filter by Time" Grid.Column="1">
+        <Grid DockPanel.Dock ="Top">
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Button  Content="Today" Grid.Row="0" Grid.Column="0" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                <Button.Resources>
+                    <sys:String x:Key="fixedTimeType">Day</sys:String>
+                    <sys:String x:Key="fixedValue">1</sys:String>
+                </Button.Resources>
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                        <Binding Source="{StaticResource fixedTimeType}"/>
+                        <Binding Source="{StaticResource fixedValue}"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+            <Button  Content="Last 2 Days" Grid.Row="0" Grid.Column="1" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                <Button.Resources>
+                    <sys:String x:Key="fixedTimeType">Day</sys:String>
+                    <sys:String x:Key="fixedValue">2</sys:String>
+                </Button.Resources>
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                        <Binding Source="{StaticResource fixedTimeType}"/>
+                        <Binding Source="{StaticResource fixedValue}"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+            <Button  Content="Last Week" Grid.Row="1" Grid.Column="0" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                <Button.Resources>
+                    <sys:String x:Key="fixedTimeType">Week</sys:String>
+                    <sys:String x:Key="fixedValue">1</sys:String>
+                </Button.Resources>
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                        <Binding Source="{StaticResource fixedTimeType}"/>
+                        <Binding Source="{StaticResource fixedValue}"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+            <Button  Content="Last Month" Grid.Row="1" Grid.Column="1" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                <Button.Resources>
+                    <sys:String x:Key="fixedTimeType">Month</sys:String>
+                    <sys:String x:Key="fixedValue">1</sys:String>
+                </Button.Resources>
+                <Button.CommandParameter>
+                    <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                        <Binding Source="{StaticResource fixedTimeType}"/>
+                        <Binding Source="{StaticResource fixedValue}"/>
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+
+        </Grid>
+    </RibbonGroup>
+</RibbonTab>
+
+
+
+@@@@@ mainRibbonTabViewModel.cs
+
+using System;
+using Alarm4Rest_Viewer.Services;
+using System.Windows.Input;
+
+namespace Alarm4Rest_Viewer.CustControl
+{
+    class mainRibbonTapViewModel : PropertyChangeEventBase
+    {
+
+        #region Helper Function
+
+        /* WPF call method with parameter*/
+        RelayCommand _RunFilterTimeCondCmd;
+        public ICommand RunFilterTimeCondCmd
+        {
+            get
+            {
+                if (_RunFilterTimeCondCmd == null)
+                {
+                    _RunFilterTimeCondCmd = new RelayCommand(p => RunFilterTimeCond(p),
+                        p => true);
+                }
+                return _RunFilterTimeCondCmd;
+            }
+        }
+
+        // WPF Call with parameter
+        private async void RunFilterTimeCond(object value)
+        {
+            TimeCondItem DateTimeCond = (TimeCondItem)value;
+
+            /*
+            IEnumerable<IGrouping<string, Item>> groupFields =
+                    from item in filters
+                    group item by item.FieldName;
+
+            filterParseDeleg = FilterExpressionBuilder.GetExpression<RestorationAlarmList>(groupFields);
+            */
+
+            //RestAlarmsRepo.filterParseDeleg = filterParseDeleg;
+            //RestAlarmsRepo.filterParseDeleg = searchParseDeleg;
+            DateTime exclusiveEnd = DateTime.Now;
+            await RestAlarmsRepo.TGetCustAlarmAct(exclusiveEnd, DateTimeCond);
+
+            //Console.WriteLine(filterParseDeleg.Body);
+        }
+
+        #endregion
+    }
+}
+
+

@@ -1,0 +1,195 @@
+﻿<RibbonTab x:Class="Alarm4Rest_Viewer.CustControl.filterRibbonTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Alarm4Rest_Viewer.CustControl"
+
+             xmlns:RestorationAlarmLists="clr-namespace:Alarm4Rest_Viewer.RestAlarmLists" 
+             xmlns:CustomAlarmLists="clr-namespace:Alarm4Rest_Viewer.CustomAlarmLists" 
+             xmlns:Services="clr-namespace:Alarm4Rest_Viewer.Services"
+             xmlns:CustControl="clr-namespace:Alarm4Rest_Viewer.CustControl" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    
+    <RibbonTab.Resources>
+        <Services:MultiValueConverter x:Key="MultiValueConverter" />
+
+        <BitmapImage x:Key="MainImage" UriSource="/Alarm4Rest_Viewer;component/images/main.png" />
+        <BitmapImage x:Key="FilterImage" UriSource="/Alarm4Rest_Viewer;component/images/filter.png" />
+        <BitmapImage x:Key="SearchImage" UriSource="/Alarm4Rest_Viewer;component/images/search.png" />
+
+        <BitmapImage x:Key="firstPageImage" UriSource = "/Alarm4Rest_Viewer;component/images/firstPage.png" />
+        <BitmapImage x:Key="prePageImage" UriSource = "/Alarm4Rest_Viewer;component/images/prePage.png" />
+        <BitmapImage x:Key="nextPageImage" UriSource = "/Alarm4Rest_Viewer;component/images/nextPage.png" />
+        <BitmapImage x:Key="lastPageImage" UriSource = "/Alarm4Rest_Viewer;component/images/lastPage.png" />
+
+    </RibbonTab.Resources>
+
+    <RibbonTab.DataContext>
+        <local:filterRibbonTabViewModel/>
+    </RibbonTab.DataContext>
+
+    <!-- _______________________Ribbon Tab : Filter_______________________ -->
+        <!-- Filter  group-->
+
+        <RibbonGroup x:Name="CoditionGroup" Header="Filter Condition">
+            <Grid>
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <!-- Column 1 -->
+                <!-- Row 1 -->
+                <Label Grid.Column="0" Grid.Row="0" Margin="2" Content="Station"/>
+                <!-- Row 2 -->
+                <ComboBox Grid.Column="1" Grid.Row="0" MinWidth="180" MaxWidth="300"
+                            IsEditable="True"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding fltStationItems}"
+                            Text="{Binding fltSelectedStationsView}" Margin="2">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type ComboBox}">
+                            <CheckBox
+                                        Content="{Binding Value}"
+                                        IsChecked="{Binding IsChecked}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <!-- Column 2 -->
+                <!-- Row 1 -->
+                <Label Grid.Column="2" Grid.Row="0" Margin="2" Content="Priority"/>
+                <!-- Row 2 -->
+                <ComboBox Grid.Column="3" Grid.Row="0" MinWidth="140" MaxWidth="200"
+                            IsEditable="True"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding fltPriorityItems}"
+                            Text="{Binding fltSelectedPriorityView}" Margin="2">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type ComboBox}">
+                            <CheckBox
+                                        Content="{Binding Value}"
+                                        IsChecked="{Binding IsChecked}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <!-- Column 3 -->
+                <!-- Row 1 -->
+                <Label Grid.Column="4" Grid.Row="0" Margin="2" Content="Message"/>
+                <ComboBox Grid.Column="5" Grid.Row="0" MinWidth="200" MaxWidth="300"
+                            IsEditable="True"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding fltMessageItems}"
+                            Text="{Binding fltSelectedMessageView}" Margin="2">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type ComboBox}">
+                            <CheckBox
+                                        Content="{Binding Value}"
+                                        IsChecked="{Binding IsChecked}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <!-- Row2 -->
+
+                <Label Grid.Column="0" Grid.Row="1" Margin="2" Content="Group Desc."/>
+                <ComboBox Grid.Column="1" Grid.Row="1" MinWidth="200" Grid.ColumnSpan="3"
+                            IsEditable="True"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding fltGroupDescItems}"
+                            Text="{Binding fltSelectedGroupDescriptionView}" Margin="2">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type ComboBox}">
+                            <CheckBox
+                                        Content="{Binding Value}"
+                                        IsChecked="{Binding IsChecked}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Grid>
+
+        </RibbonGroup>
+        <!-- Filter cmd group-->
+
+        <RibbonGroup x:Name="FilterCommand" Header="Command">
+            <RibbonButton LargeImageSource="{StaticResource FilterImage}" Label="Apply" KeyTip="F" 
+                                  Command="{Binding RunFilterCmd}" />
+        </RibbonGroup>
+        <RibbonGroup x:Name="fTimeCondition" Header="Filter by Time" Grid.Column="1">
+            <Grid DockPanel.Dock ="Top">
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Button  Content="Today" Grid.Row="0" Grid.Column="0" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                    <Button.Resources>
+                        <sys:String x:Key="fixedTimeType">Day</sys:String>
+                        <sys:String x:Key="fixedValue">1</sys:String>
+                    </Button.Resources>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                            <Binding Source="{StaticResource fixedTimeType}"/>
+                            <Binding Source="{StaticResource fixedValue}"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button  Content="Last 2 Days" Grid.Row="0" Grid.Column="1" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                    <Button.Resources>
+                        <sys:String x:Key="fixedTimeType">Day</sys:String>
+                        <sys:String x:Key="fixedValue">2</sys:String>
+                    </Button.Resources>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                            <Binding Source="{StaticResource fixedTimeType}"/>
+                            <Binding Source="{StaticResource fixedValue}"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button  Content="This Week" Grid.Row="1" Grid.Column="0" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                    <Button.Resources>
+                        <sys:String x:Key="fixedTimeType">Week</sys:String>
+                        <sys:String x:Key="fixedValue">1</sys:String>
+                    </Button.Resources>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                            <Binding Source="{StaticResource fixedTimeType}"/>
+                            <Binding Source="{StaticResource fixedValue}"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button  Content="This Month" Grid.Row="1" Grid.Column="1" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                    <Button.Resources>
+                        <sys:String x:Key="fixedTimeType">Month</sys:String>
+                        <sys:String x:Key="fixedValue">1</sys:String>
+                    </Button.Resources>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                            <Binding Source="{StaticResource fixedTimeType}"/>
+                            <Binding Source="{StaticResource fixedValue}"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+
+            </Grid>
+        </RibbonGroup>
+
+    </RibbonTab>

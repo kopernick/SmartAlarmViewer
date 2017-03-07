@@ -1,0 +1,86 @@
+<!-- Ribbon Tab #0: Home -->
+            <RibbonTab Header="Home" KeyTip="F" >
+                <!-- Filter  group-->
+                <RibbonGroup x:Name="StdQuery" Header="Standard Query">
+                    <Grid DockPanel.Dock ="Top">
+                        <Grid.ColumnDefinitions >
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        
+                    </Grid>
+                </RibbonGroup>
+
+                <RibbonGroup x:Name="TimeCondition" Header="Filter by Time">
+                    <Grid DockPanel.Dock ="Top">
+                        <Grid.ColumnDefinitions >
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Button  Content="Today" Grid.Row="0" Grid.Column="0" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                        <Button.Resources>
+                            <sys:String x:Key="fixedTimeType">Day</sys:String>
+                            <sys:String x:Key="fixedValue">1</sys:String>
+                        </Button.Resources>
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                <Binding Source="{StaticResource fixedTimeType}"/>
+                                <Binding Source="{StaticResource fixedValue}"/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </Button>
+                        <Button  Content="Last 2 Days" Grid.Row="0" Grid.Column="1" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                        <Button.Resources>
+                            <sys:String x:Key="fixedTimeType">Day</sys:String>
+                            <sys:String x:Key="fixedValue">2</sys:String>
+                        </Button.Resources>
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                <Binding Source="{StaticResource fixedTimeType}"/>
+                                <Binding Source="{StaticResource fixedValue}"/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </Button>
+                        <Button  Content="Last Week" Grid.Row="1" Grid.Column="0" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                        <Button.Resources>
+                            <sys:String x:Key="fixedTimeType">Week</sys:String>
+                            <sys:String x:Key="fixedValue">1</sys:String>
+                        </Button.Resources>
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                <Binding Source="{StaticResource fixedTimeType}"/>
+                                <Binding Source="{StaticResource fixedValue}"/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                     </Button>
+                        <Button  Content="Last Month" Grid.Row="1" Grid.Column="1" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                        <Button.Resources>
+                            <sys:String x:Key="fixedTimeType">Month</sys:String>
+                            <sys:String x:Key="fixedValue">1</sys:String>
+                        </Button.Resources>
+                        <Button.CommandParameter>
+                            <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                <Binding Source="{StaticResource fixedTimeType}"/>
+                                <Binding Source="{StaticResource fixedValue}"/>
+                            </MultiBinding>
+                        </Button.CommandParameter>
+                    </Button>
+                        
+                    </Grid>
+                </RibbonGroup>
+            </RibbonTab>

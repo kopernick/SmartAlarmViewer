@@ -1,0 +1,207 @@
+﻿<RibbonTab x:Class="Alarm4Rest_Viewer.CustControl.searchRibbonTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Alarm4Rest_Viewer.CustControl"
+           
+             xmlns:RestorationAlarmLists="clr-namespace:Alarm4Rest_Viewer.RestAlarmLists" 
+             xmlns:CustomAlarmLists="clr-namespace:Alarm4Rest_Viewer.CustomAlarmLists" 
+             xmlns:Services="clr-namespace:Alarm4Rest_Viewer.Services"
+             xmlns:CustControl="clr-namespace:Alarm4Rest_Viewer.CustControl" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <RibbonTab.Resources>
+        <Services:MultiValueConverter x:Key="MultiValueConverter" />
+
+        <BitmapImage x:Key="MainImage" UriSource="/Alarm4Rest_Viewer;component/images/main.png" />
+        <BitmapImage x:Key="FilterImage" UriSource="/Alarm4Rest_Viewer;component/images/filter.png" />
+        <BitmapImage x:Key="SearchImage" UriSource="/Alarm4Rest_Viewer;component/images/search.png" />
+
+        <BitmapImage x:Key="firstPageImage" UriSource = "/Alarm4Rest_Viewer;component/images/firstPage.png" />
+        <BitmapImage x:Key="prePageImage" UriSource = "/Alarm4Rest_Viewer;component/images/prePage.png" />
+        <BitmapImage x:Key="nextPageImage" UriSource = "/Alarm4Rest_Viewer;component/images/nextPage.png" />
+        <BitmapImage x:Key="lastPageImage" UriSource = "/Alarm4Rest_Viewer;component/images/lastPage.png" />
+        
+    </RibbonTab.Resources>
+
+    <RibbonTab.DataContext>
+        <local:searchRibbonTabViewModel/>
+    </RibbonTab.DataContext>
+    <!-- Keyword  group-->
+        <RibbonGroup x:Name="sMain">
+        <RibbonButton LargeImageSource="{StaticResource MainImage}" Label="Show only Main List" KeyTip="S" 
+                                  Command="{Binding EnableCustView}" />
+        </RibbonGroup>
+        <RibbonGroup x:Name="KeywordGroup" Header="ระบุคำที่ต้องการค้นหา">
+            <Grid DockPanel.Dock ="Top">
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <!-- Row 1 -->
+                <Label Grid.Column="0" Grid.Row="0" Margin="2" Content="ค้นหา Point(s):"/>
+                <TextBox Grid.Column="1" Grid.Row="0" Width="Auto" Grid.ColumnSpan="2" 
+                                MinLines="2"
+                                MaxLines="3"
+                                AcceptsReturn="True"
+                                ScrollViewer.CanContentScroll="True"
+                                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                Text="{Binding search_Parse_Pri, UpdateSourceTrigger=PropertyChanged}" Margin="2">
+
+                </TextBox>
+
+                <Label Grid.Column="0" Grid.Row="1" Margin="2"  Content="ค้นหาโดยระบุ Columns:"/>
+
+                <TextBox Grid.Column="1" Grid.Row="1" Width="150" Grid.ColumnSpan="1" 
+                                Text="{Binding search_Parse_Sec, UpdateSourceTrigger=PropertyChanged}" Margin="2">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Return" 
+                                               Command="{Binding RunSearchCmd}"/>
+                    </TextBox.InputBindings>
+                </TextBox>
+
+                <ComboBox Grid.Column="2" Grid.Row="1" Width="80"
+                                IsEditable="True"
+                                IsReadOnly="True"
+                                ItemsSource="{Binding fieldItems}"
+                                Text="{Binding selectedFieldView}" Margin="2">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type Services:Item}">
+                            <CheckBox
+                                                Content="{Binding Value}"
+                                                IsChecked="{Binding IsChecked}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+            </Grid>
+        </RibbonGroup>
+
+        <!-- Scope  group-->
+        <RibbonGroup x:Name="SearchingScopeGroup" Header="Searching Scope">
+            <Grid DockPanel.Dock ="Top">
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Column="0" Grid.Row="0" Margin="2" Width="80" Content="สถานี:"/>
+                <ComboBox Grid.Column="1" Grid.Row="0" Width="100" Grid.ColumnSpan="1"
+                                        IsEditable="True"
+                                        IsReadOnly="True"
+                                        ItemsSource="{Binding stationItems}"
+                                        Text="{Binding selectedStationsView}" Margin="2">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type ComboBox}">
+                            <CheckBox
+                                        Content="{Binding Value}"
+                                        IsChecked="{Binding IsChecked}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+                <Label Grid.Column="0" Grid.Row="1" Margin="2" Width="Auto" Content="Priority:"/>
+                <ComboBox Grid.Column="1" Grid.Row="1" Width="100" Grid.ColumnSpan="1"
+                        IsEditable="True"
+                        IsReadOnly="True"
+                        ItemsSource="{Binding priorityItems}"
+                        Text="{Binding selectedPriorityView}" Margin="2">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate DataType="{x:Type ComboBox}">
+                            <CheckBox
+                                    Content="{Binding Value}"
+                                    IsChecked="{Binding IsChecked}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+
+            </Grid>
+
+        </RibbonGroup>
+
+        <RibbonGroup x:Name="SearchCommandGroup" Header="Command">
+            <RibbonButton LargeImageSource="{StaticResource SearchImage}" Label="Apply" KeyTip="S" 
+                                  Command="{Binding RunSearchCmd}" />
+        </RibbonGroup>
+        <RibbonGroup x:Name="sTimeCondition" Header="Filter by Time" Grid.Column="1">
+            <Grid DockPanel.Dock ="Top">
+                <Grid.ColumnDefinitions >
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <Button  Content="Today" Grid.Row="0" Grid.Column="0" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunSearchTimeCondCmd}">
+                    <Button.Resources>
+                        <sys:String x:Key="fixedTimeType">Day</sys:String>
+                        <sys:String x:Key="fixedValue">1</sys:String>
+                    </Button.Resources>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                            <Binding Source="{StaticResource fixedTimeType}"/>
+                            <Binding Source="{StaticResource fixedValue}"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button  Content="Last 2 Days" Grid.Row="0" Grid.Column="1" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunSearchTimeCondCmd}">
+                    <Button.Resources>
+                        <sys:String x:Key="fixedTimeType">Day</sys:String>
+                        <sys:String x:Key="fixedValue">2</sys:String>
+                    </Button.Resources>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                            <Binding Source="{StaticResource fixedTimeType}"/>
+                            <Binding Source="{StaticResource fixedValue}"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button  Content="This Week" Grid.Row="1" Grid.Column="0" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunSearchTimeCondCmd}">
+                    <Button.Resources>
+                        <sys:String x:Key="fixedTimeType">Week</sys:String>
+                        <sys:String x:Key="fixedValue">1</sys:String>
+                    </Button.Resources>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                            <Binding Source="{StaticResource fixedTimeType}"/>
+                            <Binding Source="{StaticResource fixedValue}"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+                <Button  Content="This Month" Grid.Row="1" Grid.Column="1" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunSearchTimeCondCmd}">
+                    <Button.Resources>
+                        <sys:String x:Key="fixedTimeType">Month</sys:String>
+                        <sys:String x:Key="fixedValue">1</sys:String>
+                    </Button.Resources>
+                    <Button.CommandParameter>
+                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                            <Binding Source="{StaticResource fixedTimeType}"/>
+                            <Binding Source="{StaticResource fixedValue}"/>
+                        </MultiBinding>
+                    </Button.CommandParameter>
+                </Button>
+
+            </Grid>
+        </RibbonGroup>
+
+</RibbonTab>

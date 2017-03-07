@@ -1,0 +1,169 @@
+<!-- _______________________Ribbon Tab #2: Filter_______________________ -->
+            <RibbonTab Header="Advance Filter" KeyTip="F" >
+                <!-- Filter  group-->
+
+                <RibbonGroup x:Name="fMain" >
+                    <RibbonButton LargeImageSource="Images\main.png" Label="Show only Main List" KeyTip="S" 
+                                  Command="{Binding EnableCustView}" />
+                </RibbonGroup>
+                <RibbonGroup x:Name="CoditionGroup" Header="Filter Condition">
+                    <Grid>
+                        <Grid.ColumnDefinitions >
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Column 1 -->
+                        <!-- Row 1 -->
+                        <Label Grid.Column="0" Grid.Row="0" Margin="2" Content="Station"/>
+                        <!-- Row 2 -->
+                        <ComboBox Grid.Column="1" Grid.Row="0" MinWidth="180" MaxWidth="300"
+                            IsEditable="True"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding fltStationItems}"
+                            Text="{Binding fltSelectedStationsView}" Margin="2">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type ComboBox}">
+                                    <CheckBox
+                                        Content="{Binding Value}"
+                                        IsChecked="{Binding IsChecked}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <!-- Column 2 -->
+                        <!-- Row 1 -->
+                        <Label Grid.Column="2" Grid.Row="0" Margin="2" Content="Priority"/>
+                        <!-- Row 2 -->
+                        <ComboBox Grid.Column="3" Grid.Row="0" MinWidth="140" MaxWidth="200"
+                            IsEditable="True"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding fltPriorityItems}"
+                            Text="{Binding fltSelectedPriorityView}" Margin="2">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type ComboBox}">
+                                    <CheckBox
+                                        Content="{Binding Value}"
+                                        IsChecked="{Binding IsChecked}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <!-- Column 3 -->
+                        <!-- Row 1 -->
+                        <Label Grid.Column="4" Grid.Row="0" Margin="2" Content="Message"/>
+                        <ComboBox Grid.Column="5" Grid.Row="0" MinWidth="200" MaxWidth="300"
+                            IsEditable="True"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding fltMessageItems}"
+                            Text="{Binding fltSelectedMessageView}" Margin="2">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type ComboBox}">
+                                    <CheckBox
+                                        Content="{Binding Value}"
+                                        IsChecked="{Binding IsChecked}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                        <!-- Row2 -->
+
+                        <Label Grid.Column="0" Grid.Row="1" Margin="2" Content="Group Desc."/>
+                        <ComboBox Grid.Column="1" Grid.Row="1" MinWidth="200" Grid.ColumnSpan="3"
+                            IsEditable="True"
+                            IsReadOnly="True"
+                            ItemsSource="{Binding fltGroupDescItems}"
+                            Text="{Binding fltSelectedGroupDescriptionView}" Margin="2">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate DataType="{x:Type ComboBox}">
+                                    <CheckBox
+                                        Content="{Binding Value}"
+                                        IsChecked="{Binding IsChecked}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+
+                </RibbonGroup>
+                <!-- Filter cmd group-->
+                
+                <RibbonGroup x:Name="FilterCommand" Header="Command">
+                    <RibbonButton LargeImageSource="Images\filter.png" Label="Apply" KeyTip="F" 
+                                  Command="{Binding RunFilterCmd}" />
+                </RibbonGroup>
+                <RibbonGroup x:Name="fTimeCondition" Header="Filter by Time" Grid.Column="1">
+                    <Grid DockPanel.Dock ="Top">
+                        <Grid.ColumnDefinitions >
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Button  Content="Today" Grid.Row="0" Grid.Column="0" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                            <Button.Resources>
+                                <sys:String x:Key="fixedTimeType">Day</sys:String>
+                                <sys:String x:Key="fixedValue">1</sys:String>
+                            </Button.Resources>
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                    <Binding Source="{StaticResource fixedTimeType}"/>
+                                    <Binding Source="{StaticResource fixedValue}"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button  Content="Last 2 Days" Grid.Row="0" Grid.Column="1" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                            <Button.Resources>
+                                <sys:String x:Key="fixedTimeType">Day</sys:String>
+                                <sys:String x:Key="fixedValue">2</sys:String>
+                            </Button.Resources>
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                    <Binding Source="{StaticResource fixedTimeType}"/>
+                                    <Binding Source="{StaticResource fixedValue}"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button  Content="This Week" Grid.Row="1" Grid.Column="0" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                            <Button.Resources>
+                                <sys:String x:Key="fixedTimeType">Week</sys:String>
+                                <sys:String x:Key="fixedValue">1</sys:String>
+                            </Button.Resources>
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                    <Binding Source="{StaticResource fixedTimeType}"/>
+                                    <Binding Source="{StaticResource fixedValue}"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+                        <Button  Content="This Month" Grid.Row="1" Grid.Column="1" MinWidth="72" Width="Auto" Margin="5,2,5,2"
+                                  Command="{Binding RunFilterTimeCondCmd}">
+                            <Button.Resources>
+                                <sys:String x:Key="fixedTimeType">Month</sys:String>
+                                <sys:String x:Key="fixedValue">1</sys:String>
+                            </Button.Resources>
+                            <Button.CommandParameter>
+                                <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                    <Binding Source="{StaticResource fixedTimeType}"/>
+                                    <Binding Source="{StaticResource fixedValue}"/>
+                                </MultiBinding>
+                            </Button.CommandParameter>
+                        </Button>
+
+                    </Grid>
+                </RibbonGroup>
+
+            </RibbonTab>

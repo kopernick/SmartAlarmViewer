@@ -1,0 +1,159 @@
+﻿<Window x:Class="Alarm4Rest_Viewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Alarm4Rest_Viewer"
+        xmlns:RestAlarmLists="clr-namespace:Alarm4Rest_Viewer.RestAlarmLists" 
+        xmlns:CustomAlarmLists="clr-namespace:Alarm4Rest_Viewer.CustomAlarmLists" 
+        xmlns:QueryAlarmLists="clr-namespace:Alarm4Rest_Viewer.QueryAlarmLists"
+        xmlns:Services="clr-namespace:Alarm4Rest_Viewer.Services"
+        xmlns:CustControl="clr-namespace:Alarm4Rest_Viewer.CustControl" 
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity" 
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions" 
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="Smart Infomation for Restoration " Height="750" Width="1280">
+
+    
+
+    <Window.Resources>
+
+        <Services:MultiValueConverter x:Key="MultiValueConverter" />
+
+        <DataTemplate DataType="{x:Type CustomAlarmLists:CustomAlarmListViewModel}">
+            <CustomAlarmLists:CustomAlarmsListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type QueryAlarmLists:QueryAlarmsListViewModel}">
+            <QueryAlarmLists:QueryAlarmsListView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type CustControl:filterToolBarViewModel}">
+            <CustControl:filterToolBarView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type CustControl:searchToolBarViewModel}">
+            <CustControl:searchToolBarView />
+        </DataTemplate>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Ribbon x:Name="RibbonWin" DockPanel.Dock="Top" SelectedIndex="0" Grid.Row="0">
+
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding RibbonTabSelectionChangedCommand}"
+                                           CommandParameter="{Binding ElementName=RibbonWin}"/>
+
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            
+            <!-- Help Pane, located at the right-hand side -->
+            <Ribbon.HelpPaneContent>
+                <Grid DockPanel.Dock ="Top">
+                    <Grid.ColumnDefinitions >
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <Label Grid.Column="0" Grid.Row="0" Margin="2"  Content="Records/Page"/>
+
+                    <TextBox Grid.Column="1" Grid.Row="0" Width="56" Grid.ColumnSpan="1" 
+                                Text="{Binding pageSize, UpdateSourceTrigger=PropertyChanged}" Margin="2" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                    </TextBox>
+                    <!--Set Records/Page-->
+                    <Button Grid.Column="2" Grid.Row="0"  Width="56" Content="Apply" Margin="10,2,20,2"
+                                  Command="{Binding SetPageSize}" />
+                </Grid>
+                
+            </Ribbon.HelpPaneContent>
+
+            <!-- Application Menu, located at the left-hand side (down arrow) -->
+            <Ribbon.ApplicationMenu>
+                <RibbonApplicationMenu KeyTip="F">
+                    <RibbonApplicationMenuItem Header="Setting" ImageSource="Images\setting.png" />
+                    <RibbonApplicationMenuItem Header="Exit" ImageSource="Images\export.png" />
+                </RibbonApplicationMenu>
+            </Ribbon.ApplicationMenu>
+            <!-- _______________________Ribbon Tab #0: Select_______________________ -->
+            <!--<CustControl:selectTapView Header="Select" x:Name="Select" Height="Auto"/>
+            -->
+            <!-- _______________________Ribbon Tab #0: Main_______________________ -->
+            <CustControl:mainRibbonTapView Header="Main" x:Name="RibbonTabMain" Height="Auto"/>
+
+            <!-- _______________________Ribbon Tab #1: Search_______________________ -->
+
+            <CustControl:searchRibbonTabView Header="Advance Search" x:Name="RibbonTabSearch" Height="Auto"/>
+
+            <!-- _______________________Ribbon Tab #2: Filter_______________________ -->
+
+            <CustControl:filterRibbonTabView Header="Advance Filter" x:Name="RibbonTabFilter" Height="Auto"/>
+            
+        </Ribbon>
+
+        <DockPanel Grid.Row="1">
+            <!--_______________________Table View_______________________-->
+            <DockPanel.Resources>
+                <BitmapImage x:Key="MainImage" UriSource="/Alarm4Rest_Viewer;component/images/main.png" />
+                <BitmapImage x:Key="FilterImage" UriSource="/Alarm4Rest_Viewer;component/images/filter.png" />
+                <BitmapImage x:Key="SearchImage" UriSource="/Alarm4Rest_Viewer;component/images/search.png" />
+
+                <BitmapImage x:Key="firstPageImage" UriSource = "/Alarm4Rest_Viewer;component/images/firstPage.png" />
+                <BitmapImage x:Key="prePageImage" UriSource = "/Alarm4Rest_Viewer;component/images/prePage.png" />
+                <BitmapImage x:Key="nextPageImage" UriSource = "/Alarm4Rest_Viewer;component/images/nextPage.png" />
+                <BitmapImage x:Key="lastPageImage" UriSource = "/Alarm4Rest_Viewer;component/images/lastPage.png" />
+
+            </DockPanel.Resources>
+
+            <Grid>
+                <Grid.ColumnDefinitions >
+
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Column="0">
+                    <Grid DockPanel.Dock ="Top">
+                        <Label Content="Main Alarm List" HorizontalAlignment="Center" Width="Auto" Foreground="#FF015DFF" FontSize="14" FontWeight="Bold"/>
+                    </Grid>
+                    <Grid DockPanel.Dock ="Top">
+                        <RestAlarmLists:RestAlarmsListView Grid.Column="0" x:Name="MainView" Margin="2" HorizontalAlignment="Stretch" Width="Auto"/>
+                    </Grid>
+
+                </DockPanel>
+
+                <!--
+            <ContentControl Content="{Binding MainAlarmViewModel}" Grid.Column="0" x:Name="MainView" Margin="5" Width="Auto"/>
+-->
+                <GridSplitter Grid.Column="1" Width="3" Background="#FF4C91C1"/>
+                <DockPanel Grid.Column="2">
+                    <Grid DockPanel.Dock ="Top">
+                        <Label Content="Restoration Alarm List" HorizontalAlignment="Center" Width="Auto" FontSize="14" FontWeight="Bold" Foreground="#FF015DFF" />
+                    </Grid>
+                    <Grid DockPanel.Dock ="Top">
+
+                        <ContentControl x:Name="custView" Content="{Binding CustAlarmViewModel}" Margin="2" HorizontalAlignment="Stretch" Width="Auto"/>
+                        <!--
+                        <CustomAlarmLists:CustomAlarmsListView Grid.Column="0" x:Name="custView" Margin="2" HorizontalAlignment="Stretch" Width="Auto" />
+                        -->
+                    </Grid>
+                </DockPanel>
+            </Grid>
+        </DockPanel>
+    </Grid>
+
+</Window>
