@@ -160,36 +160,55 @@
                       HorizontalGridLinesBrush="#FFCCCCCC" Margin="0,0,-0.5,0" Cursor="Hand" 
                       VirtualizingPanel.ScrollUnit="Pixel"
                       RowStyle ="{StaticResource RowPriority}" >
+
                 <DataGrid.Columns>
 
-                    <DataGridTextColumn Header="PkID"
-                                        Binding="{Binding PkAlarmListID}"
-                                        Width="SizetoHeader"
+                    <DataGridTextColumn Header="Time"
+                                        Binding="{Binding DateTime}"
                                         IsReadOnly="True"/>
 
+                    <DataGridTextColumn Header="Station"
+                                        Binding="{Binding StationName}"
+                                        IsReadOnly="True" >
+                        <DataGridTextColumn.CellStyle>
+                            <Style>
+                                <Setter Property="FrameworkElement.VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+
+                    </DataGridTextColumn>
+
+
+                    <!--
                     <DataGridTextColumn Header="Priority"
                                         Binding="{Binding Priority}"
                                         Width="SizetoHeader"
                                         IsReadOnly="True"/>
-
-                    <DataGridTextColumn Header="Event Time"
-                                        Binding="{Binding DateTime}"
-                                        IsReadOnly="True"/>
-
-                    <DataGridTextColumn Header="Station Name"
-                                        Binding="{Binding StationName}"
+-->
+                    <DataGridTextColumn Header="Device Type"
+                                        Binding="{Binding DeviceType}"
                                         Width="SizetoHeader"
                                         IsReadOnly="True"/>
 
+                    <DataGridTextColumn Header="MAC Name"
+                                        Binding="{Binding MACName}"
+                                        Width="SizetoHeader"
+                                        IsReadOnly="True"/>
+
+                    <DataGridTextColumn Header="Short Name"
+                                        Binding="{Binding ShortName}"
+                                        IsReadOnly="True"/>
+                    <!--                   
                     <DataGridTextColumn Header="Point Name"
                                         Binding="{Binding PointName}"
                                         IsReadOnly="True"/>
-
+-->
 
                     <DataGridTextColumn Header="Message"
                                         Binding="{Binding Message}"
                                         IsReadOnly="True"/>
                 </DataGrid.Columns>
+
             </DataGrid>
         </Grid>
     </DockPanel>

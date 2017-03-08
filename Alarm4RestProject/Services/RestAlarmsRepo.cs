@@ -36,6 +36,7 @@ namespace Alarm4Rest_Viewer.Services
         public static int PreviousAlarmRecIndex { get; private set; }
         public static int startNewRestItemArray { get; private set; }
         public static RestorationAlarmLists maxPkRecIndex { get; private set; }
+        public static List<string> AlarmListFields { get; private  set; }
         public static int restAlarmCount { get; private set; }
 
         public static int startNewCustItemArray { get; private set; }
@@ -116,7 +117,6 @@ namespace Alarm4Rest_Viewer.Services
                 LastMaxAlarmRecIndex = LastAlarmRecIndex;
 
                 QueryAlarmListDump = await TGetQueryAlarmsAsync();
-                
                 if(QueryAlarmListDump.Count != 0)
                     LastQueryAlarmRecIndex = QueryAlarmListDump[0].PkAlarmListID;
 
@@ -126,6 +126,8 @@ namespace Alarm4Rest_Viewer.Services
                 DeviceType = await GetDeviceTypeAsync();
 
                 Message = await GetMessageAsync();
+
+                AlarmListFields = GetAlarmListFields();
 
                 //Send Message to Subscriber
                 arg.message = "Start Success";
@@ -176,6 +178,12 @@ namespace Alarm4Rest_Viewer.Services
                 .ToListAsync<string>();
         }
 
+        private static List<string> GetAlarmListFields()
+        {
+            return typeof(RestorationAlarmLists).GetProperties()
+                                    .Select(property => property.Name)
+                                    .ToList();
+        }
 
         public static async Task<List<string>> GetDeviceTypeAsync()
         {

@@ -201,6 +201,7 @@ namespace Alarm4Rest_Viewer.CustControl
                     if (Message != null)
                         mfltMessageItems.Add(new Item(Message.ToString(), "Message"));
                 }
+
             }
         }
 

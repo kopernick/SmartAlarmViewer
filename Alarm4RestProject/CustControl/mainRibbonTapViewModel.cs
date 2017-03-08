@@ -7,16 +7,18 @@ using System.Linq.Expressions;
 using SmartAlarmData;
 using System.Linq;
 using System.Collections.ObjectModel;
+using Solutions.Wpf.DragDrop;
 
 namespace Alarm4Rest_Viewer.CustControl
 {
-    class mainRibbonTapViewModel : PropertyChangeEventBase
+    class mainRibbonTapViewModel : PropertyChangeEventBase, IDropTarget
     {
 
         #region Properties
         public static List<SortItem> sortOrderList = new List<SortItem>();
         public static List<string> qSelectedGroupDescription = new List<string>();
         public static List<string> fltSelectedPriority = new List<string>();
+        ObservableCollection<string> AlarmListFields;
 
         public Expression<Func<RestorationAlarmLists, bool>> queryParseDeleg;
         public static List<Item> qFilters = new List<Item>();
@@ -114,6 +116,7 @@ namespace Alarm4Rest_Viewer.CustControl
             InitTimeFiltering();
             InitSortOrderField();
 
+            RestAlarmsRepo.RestAlarmChanged += OnRestAlarmChanged;
             RestAlarmsRepo.qDateTimeCondItem = _Last2Weeks;
 
             RestAlarmsRepo.orderParseDeleg = sortOrderList.First(i => i.ID == 1);
@@ -124,6 +127,8 @@ namespace Alarm4Rest_Viewer.CustControl
         //------------------------------Helper Function--------------------------------------//
         private void InitSortOrderField()
         {
+            AlarmListFields = new ObservableCollection<string>();
+
             mfieldItems1 = new ObservableCollection<Item>();
             mfieldItems1.Add(new Item("first", "DateTime"));
             mfieldItems1.Add(new Item("first", "StationName"));
@@ -197,7 +202,23 @@ namespace Alarm4Rest_Viewer.CustControl
 
             _exclusiveEnd = DateTime.Now;
             _exclusiveStart = _exclusiveEnd.AddDays((-1) * 5);
-    }
+        }
+
+        private void OnRestAlarmChanged(object source, RestEventArgs arg)
+        {
+            if (arg.message == "Start Success")
+            {
+
+                // Adding AlarmListFields ComboBox items
+                foreach (var AlarmListField in RestAlarmsRepo.AlarmListFields)
+                {
+                    if (AlarmListField != null)
+                        AlarmListFields.Add(AlarmListField.ToString());
+
+                }
+
+            }
+        }
 
 
         #region Sort Function
@@ -363,6 +384,38 @@ namespace Alarm4Rest_Viewer.CustControl
                 }
             }
         }
+
+
+
+        void IDropTarget.DragOver(DropInfo dropInfo)
+        {
+            //if (dropInfo.Data is PupilViewModel && dropInfo.TargetItem is SchoolViewModel)
+            //{
+            //    dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+            //    dropInfo.Effects = DragDropEffects.Move;
+            //}
+        }
+
+        void IDropTarget.Drop(DropInfo dropInfo)
+        {
+            //SchoolViewModel school = (SchoolViewModel)dropInfo.TargetItem;
+            //PupilViewModel pupil = (PupilViewModel)dropInfo.Data;
+            //school.Pupils.Add(pupil);
+            //((IList)dropInfo.DragInfo.SourceCollection).Remove(pupil);
+        }
+
+
+        //public void DragOver(DropInfo dropInfo)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        //public void Drop(DropInfo dropInfo)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+
 
         ///* WPF call method with 1 parameter*/
         //private bool isChecked87X;

@@ -36,15 +36,27 @@
             <BitmapImage x:Key="exportImage" UriSource = "/Alarm4Rest_Viewer;component/images/export.png" />
             <Style x:Key="RowPriority" TargetType="{x:Type DataGridRow}">
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding Priority}" Value="High           ">
+                    <DataTrigger Binding="{Binding DeviceID}" Value="1">
                         <Setter Property="Background" Value="DarkRed"/>
                         <Setter Property="Foreground" Value="White"/>
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Priority}" Value="Medium         ">
+                    <DataTrigger Binding="{Binding DeviceID}" Value="2">
                         <Setter Property="Background" Value="Gold"/>
                     </DataTrigger>
-                    <DataTrigger Binding="{Binding Priority}" Value="Low            ">
-                        <Setter Property="Background" Value="Azure"/>
+                    <DataTrigger Binding="{Binding DeviceID}" Value="3">
+                        <Setter Property="Background" Value="Aquamarine"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding DeviceID}" Value="4">
+                        <Setter Property="Background" Value="Aquamarine"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding DeviceID}" Value="5">
+                        <Setter Property="Background" Value="Purple"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding DeviceID}" Value="6">
+                        <Setter Property="Background" Value="DarkCyan"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding DeviceID}" Value="7">
+                        <Setter Property="Background" Value="RoyalBlue"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -160,31 +172,54 @@
                       HorizontalGridLinesBrush="#FFCCCCCC" Margin="0,0,-0.5,0" Cursor="Hand" 
                       VirtualizingPanel.ScrollUnit="Pixel"
                       RowStyle ="{StaticResource RowPriority}" >
+                
                 <DataGrid.Columns>
 
                     <DataGridTextColumn Header="PkID"
                                         Binding="{Binding PkAlarmListID}"
                                         Width="SizetoHeader"
                                         IsReadOnly="True"/>
+                    
+                    <DataGridTextColumn Header="Time"
+                                        Binding="{Binding DateTime}"
+                                        IsReadOnly="True"/>
+                    
+                    <DataGridTextColumn Header="Station"
+                                        Binding="{Binding StationName}"
+                                        IsReadOnly="True" >
+                        <DataGridTextColumn.CellStyle>
+                            <Style>
+                                <Setter Property="FrameworkElement.VerticalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
 
+                    </DataGridTextColumn>
+                       
+
+                    <!--
                     <DataGridTextColumn Header="Priority"
                                         Binding="{Binding Priority}"
                                         Width="SizetoHeader"
                                         IsReadOnly="True"/>
-
-                    <DataGridTextColumn Header="Event Time"
-                                        Binding="{Binding DateTime}"
+-->
+                    <DataGridTextColumn Header="Device Type"
+                                        Binding="{Binding DeviceType}"
+                                        Width="SizetoHeader"
                                         IsReadOnly="True"/>
-
-                    <DataGridTextColumn Header="Station Name"
-                                        Binding="{Binding StationName}"
+                    
+                    <DataGridTextColumn Header="MAC Name"
+                                        Binding="{Binding MACName}"
                                         Width="SizetoHeader"
                                         IsReadOnly="True"/>
 
+                    <DataGridTextColumn Header="Short Name"
+                                        Binding="{Binding ShortName}"
+                                        IsReadOnly="True"/>
+                    <!--                   
                     <DataGridTextColumn Header="Point Name"
                                         Binding="{Binding PointName}"
                                         IsReadOnly="True"/>
-
+--> 
 
                     <DataGridTextColumn Header="Message"
                                         Binding="{Binding Message}"
