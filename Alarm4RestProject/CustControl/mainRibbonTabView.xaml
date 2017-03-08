@@ -5,11 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Alarm4Rest_Viewer.CustControl"
              
-            xmlns:RestorationAlarmLists="clr-namespace:Alarm4Rest_Viewer.RestAlarmLists" 
-            xmlns:CustomAlarmLists="clr-namespace:Alarm4Rest_Viewer.CustomAlarmLists" 
-            xmlns:Services="clr-namespace:Alarm4Rest_Viewer.Services"
-            xmlns:CustControl="clr-namespace:Alarm4Rest_Viewer.CustControl" 
-            xmlns:sys="clr-namespace:System;assembly=mscorlib">
+             xmlns:RestorationAlarmLists="clr-namespace:Alarm4Rest_Viewer.RestAlarmLists" 
+             xmlns:CustomAlarmLists="clr-namespace:Alarm4Rest_Viewer.CustomAlarmLists" 
+             xmlns:Services="clr-namespace:Alarm4Rest_Viewer.Services"
+             xmlns:CustControl="clr-namespace:Alarm4Rest_Viewer.CustControl" 
+             xmlns:dd="clr-namespace:Solutions.Wpf.DragDrop;assembly=Solutions.Wpf.DragDrop"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
         <RibbonTab.Resources>
             <Services:MultiValueConverter x:Key="MultiValueConverter" />
@@ -37,12 +38,13 @@
 
                 <Grid>
                     <Grid.ColumnDefinitions >
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="200"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
@@ -121,6 +123,26 @@
     </RibbonGroup>
 
     <!-- Standard Query group-->
+
+    <RibbonGroup x:Name="SortQuery" Header="Sort Order">
+        <Grid>
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <ListBox Grid.Column="0" Grid.RowSpan="3" ItemsSource="{Binding AlarmListFields}" DisplayMemberPath ="FieldName"
+                 IsSynchronizedWithCurrentItem="True"
+                 dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding}"/>
+            <ListBox Grid.Column="1" Grid.RowSpan="3" ItemsSource="{Binding Schools.CurrentItem.Pupils}" DisplayMemberPath="FullName"
+                 dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"/>
+        </Grid>
+    </RibbonGroup>
     <!--
         <RibbonGroup x:Name="SortQuery" Header="Sort Order">
             <Grid>

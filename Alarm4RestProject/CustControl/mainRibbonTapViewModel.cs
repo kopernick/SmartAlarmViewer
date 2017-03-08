@@ -18,7 +18,7 @@ namespace Alarm4Rest_Viewer.CustControl
         public static List<SortItem> sortOrderList = new List<SortItem>();
         public static List<string> qSelectedGroupDescription = new List<string>();
         public static List<string> fltSelectedPriority = new List<string>();
-        ObservableCollection<string> AlarmListFields;
+        
 
         public Expression<Func<RestorationAlarmLists, bool>> queryParseDeleg;
         public static List<Item> qFilters = new List<Item>();
@@ -35,6 +35,16 @@ namespace Alarm4Rest_Viewer.CustControl
         private ObservableCollection<Item> mfieldItems3;
         public IEnumerable<Item> fieldItems3 { get { return mfieldItems3; } }
 
+        private ObservableCollection<AlarmFieldModel> _AlarmListFields;
+        public ObservableCollection<AlarmFieldModel> AlarmListFields
+        {
+            get { return _AlarmListFields; }
+            set
+            {
+                _AlarmListFields = value;
+                OnPropertyChanged("AlarmListFields");
+            }
+        }
 
         //-----------------------------------Category----------------------------------//
         private Item _CatDesc1;
@@ -127,7 +137,7 @@ namespace Alarm4Rest_Viewer.CustControl
         //------------------------------Helper Function--------------------------------------//
         private void InitSortOrderField()
         {
-            AlarmListFields = new ObservableCollection<string>();
+            _AlarmListFields = new ObservableCollection<AlarmFieldModel>();
 
             mfieldItems1 = new ObservableCollection<Item>();
             mfieldItems1.Add(new Item("first", "DateTime"));
@@ -213,8 +223,7 @@ namespace Alarm4Rest_Viewer.CustControl
                 foreach (var AlarmListField in RestAlarmsRepo.AlarmListFields)
                 {
                     if (AlarmListField != null)
-                        AlarmListFields.Add(AlarmListField.ToString());
-
+                        _AlarmListFields.Add(new AlarmFieldModel { FieldName = AlarmListField.ToString() });
                 }
 
             }
