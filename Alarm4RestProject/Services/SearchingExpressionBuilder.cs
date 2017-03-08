@@ -26,7 +26,7 @@ namespace Alarm4Rest_Viewer.Services
             Expression outerExp; //And between field
 
             outerExp = null;
-            ParameterExpression pe = Expression.Parameter(typeof(T), "RestorationAlarm");
+            ParameterExpression pe = Expression.Parameter(typeof(T), "RestorationAlarmList");
 
             try
             {
@@ -139,7 +139,7 @@ namespace Alarm4Rest_Viewer.Services
             Expression outerExp; //And between field
 
             outerExp = null;
-            ParameterExpression pe = Expression.Parameter(typeof(T), "RestorationAlarm");
+            ParameterExpression pe = Expression.Parameter(typeof(T), "RestorationAlarmList");
 
             //Primary keyword Search Exp Building
 

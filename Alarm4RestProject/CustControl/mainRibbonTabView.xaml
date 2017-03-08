@@ -136,15 +136,86 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <ListBox Grid.Column="0" Grid.RowSpan="3" ItemsSource="{Binding AlarmListFields}" DisplayMemberPath ="FieldName"
-                 IsSynchronizedWithCurrentItem="True"
-                 dd:DragDrop.IsDropTarget="True" dd:DragDrop.DropHandler="{Binding}"/>
-            <ListBox Grid.Column="1" Grid.RowSpan="3" ItemsSource="{Binding Schools.CurrentItem.Pupils}" DisplayMemberPath="FullName"
-                 dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"/>
+         
+            
+ <!--          
+            <ListBox Grid.Column="0" Grid.RowSpan="3" MinWidth="100" 
+                     ItemsSource="{Binding AlarmListFields}" DisplayMemberPath="FieldName"
+                     dd:DragDrop.IsDragSource="True" 
+                     dd:DragDrop.IsDropTarget="True"
+                     AllowDrop="True"/>
+
+            <ListBox Grid.Column="1" Grid.RowSpan="3" MinWidth="100"
+                     ItemsSource="{Binding FieldOrders}" DisplayMemberPath ="FieldName"
+                     dd:DragDrop.IsDragSource="True"  
+                     dd:DragDrop.IsDropTarget="True"
+                     dd:DragDrop.DropHandler="{Binding}"/>
+
+            <ListView  Grid.Column="0" Grid.RowSpan="3" MinWidth="100"
+                       
+                       ItemsSource="{Binding FieldOrders}" 
+                       DisplayMemberPath="FieldName"    
+                       dd:DragDrop.IsDragSource="True" 
+                       dd:DragDrop.IsDropTarget="True"  
+                       AllowDrop="True"/>
+-->
+            
+            <ListView HorizontalAlignment="Left" Grid.RowSpan="3" Grid.Column="1" Width="250"
+                      ItemsSource="{Binding FieldOrders}"
+                      DisplayMemberPath="FieldName"    
+                       dd:DragDrop.IsDragSource="True" 
+                       dd:DragDrop.IsDropTarget="True"  
+                       AllowDrop="True">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn  Header="เลือก">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        IsChecked="{Binding IsChecked, Mode=TwoWay}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Width="100" Header="Field" 
+                                        DisplayMemberBinding="{Binding Path=FieldName}"/>
+                        <GridViewColumn Header="OrderByAsc." >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <CheckBox
+                                        IsChecked="{Binding IsOrderByAsc, Mode=TwoWay}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            
+            <!-- Row2 
+            <ComboBox Grid.Column="3" Grid.Row="0" Width="150"
+                    IsEditable="True"
+                    IsReadOnly="True"
+                    ItemsSource="{Binding groupDescItems}"
+                    Text="{Binding selectedGroupDescriptionView}" Margin="5">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type ComboBox}">
+                        <CheckBox
+                                Content="{Binding Value}"
+                                IsChecked="{Binding IsChecked}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+-->
+            <!--               
+            <ListBox Grid.Column="1" Grid.RowSpan="3" MinWidth="100" 
+                     ItemsSource="{Binding AlarmListFields}" DisplayMemberPath="FieldName"
+                     dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True"/>
+ -->            
         </Grid>
     </RibbonGroup>
+    
     <!--
-        <RibbonGroup x:Name="SortQuery" Header="Sort Order">
+        <RibbonGroup x:Name="SortQuery1" Header="Sort Order">
             <Grid>
                 <Grid.ColumnDefinitions >
                     <ColumnDefinition Width="Auto"/>
@@ -205,7 +276,7 @@
             <ComboBox Grid.Row="1" Grid.Column="1" MinWidth="80" Width="Auto"
                                 IsEditable="True"
                                 IsReadOnly="True"
-                                ItemsSource="{Binding fieldItems1}"
+                                ItemsSource="{Binding fieldItems2}"
                                 DisplayMemberPath="FieldName"
                                 SelectedValuePath="FieldName"
                                 
@@ -217,7 +288,7 @@
             <ComboBox Grid.Row="1" Grid.Column="2" MinWidth="80" Width="Auto"
                                 IsEditable="True"
                                 IsReadOnly="True"
-                                ItemsSource="{Binding fieldItems1}"
+                                ItemsSource="{Binding fieldItems3}"
                                 DisplayMemberPath="FieldName"
                                 SelectedValuePath="FieldName"
                                 
@@ -225,8 +296,8 @@
         </ComboBox>
         </Grid>
     </RibbonGroup>
-    -->
     
+    -->
     <RibbonGroup x:Name="TimeScope" Header="Time Filtering" >
         <StackPanel>
             <Grid DockPanel.Dock ="Top">

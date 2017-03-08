@@ -8,6 +8,11 @@ using SmartAlarmData;
 using System.Linq;
 using System.Collections.ObjectModel;
 using Solutions.Wpf.DragDrop;
+using System.Windows;
+using System.Collections;
+using System.Windows.Data;
+using System.ComponentModel;
+using System.Windows.Controls;
 
 namespace Alarm4Rest_Viewer.CustControl
 {
@@ -26,15 +31,7 @@ namespace Alarm4Rest_Viewer.CustControl
         private HashSet<Item> mQCheckedItems;        
         
         //-----------------------------------SortFiel Items----------------------------------//
-        private ObservableCollection<Item> mfieldItems1;
-        public IEnumerable<Item> fieldItems1 { get { return mfieldItems1; } }
-
-        private ObservableCollection<Item> mfieldItems2;
-        public IEnumerable<Item> fieldItems2 { get { return mfieldItems2; } }
-
-        private ObservableCollection<Item> mfieldItems3;
-        public IEnumerable<Item> fieldItems3 { get { return mfieldItems3; } }
-
+       
         private ObservableCollection<AlarmFieldModel> _AlarmListFields;
         public ObservableCollection<AlarmFieldModel> AlarmListFields
         {
@@ -43,6 +40,19 @@ namespace Alarm4Rest_Viewer.CustControl
             {
                 _AlarmListFields = value;
                 OnPropertyChanged("AlarmListFields");
+            }
+        }
+
+        //public ICollectionView AlarmListFields { get; private set; }
+
+        private ObservableCollection<OrderFieldModel> _FieldOrders;
+        public ObservableCollection<OrderFieldModel> FieldOrders
+        {
+            get { return _FieldOrders; }
+            set
+            {
+                _FieldOrders = value;
+                OnPropertyChanged("FieldOrders");
             }
         }
 
@@ -128,8 +138,8 @@ namespace Alarm4Rest_Viewer.CustControl
 
             RestAlarmsRepo.RestAlarmChanged += OnRestAlarmChanged;
             RestAlarmsRepo.qDateTimeCondItem = _Last2Weeks;
-
-            RestAlarmsRepo.orderParseDeleg = sortOrderList.First(i => i.ID == 1);
+            RestAlarmsRepo.orderParseDeleg = FieldOrders.ToList();
+            //RestAlarmsRepo.orderParseDeleg = sortOrderList.First(i => i.ID == 1);
 
             RunUserQueryCmd = new RelayCommand(o => onUserQuery(), o => canUserQuery());
         }
@@ -137,22 +147,15 @@ namespace Alarm4Rest_Viewer.CustControl
         //------------------------------Helper Function--------------------------------------//
         private void InitSortOrderField()
         {
-            _AlarmListFields = new ObservableCollection<AlarmFieldModel>();
+            AlarmListFields = new ObservableCollection<AlarmFieldModel>();
+            FieldOrders = new ObservableCollection<OrderFieldModel>();
 
-            mfieldItems1 = new ObservableCollection<Item>();
-            mfieldItems1.Add(new Item("first", "DateTime"));
-            mfieldItems1.Add(new Item("first", "StationName"));
-            mfieldItems1.Add(new Item("first", "Priority"));
+            //Defual Order fields
+            FieldOrders.Add(new OrderFieldModel("DateTime", true, false));          //Defual First Order field
+            FieldOrders.Add(new OrderFieldModel("StationName", true, true));      //Defual Second Order field
+            FieldOrders.Add(new OrderFieldModel("DeviceType", false, true));
+            FieldOrders.Add(new OrderFieldModel("PointName", false, true));
 
-            mfieldItems2 = new ObservableCollection<Item>();
-            mfieldItems2.Add(new Item("second", "DateTime"));
-            mfieldItems2.Add(new Item("second", "StationName"));
-            mfieldItems2.Add(new Item("second", "Priority"));
-
-            mfieldItems3 = new ObservableCollection<Item>();
-            mfieldItems3.Add(new Item("third", "DateTime"));
-            mfieldItems3.Add(new Item("third", "StationName"));
-            mfieldItems3.Add(new Item("third", "Priority"));
 
         }
         private void InitSortOrderTemplate()
@@ -167,37 +170,37 @@ namespace Alarm4Rest_Viewer.CustControl
             //isChecked87X = true;
 
             //Item(name (show at UI), value (contain), Field Name);
-            _CatDesc1 = new Item("Tx Protection", "Tx Relay", "GroupDescription");
+            _CatDesc1 = new Item("Tx Protection", "XF", "DeviceType");
             _CatDesc1.IsChecked = true;
             if (_CatDesc1.IsChecked) qFilters.Add(_CatDesc1);
 
-            _CatDesc2 = new Item("Bus Protection", "Bus Relay", "GroupDescription");
+            _CatDesc2 = new Item("Bus Protection", "BUS", "DeviceType");
             _CatDesc2.IsChecked = true;
             if (_CatDesc2.IsChecked) qFilters.Add(_CatDesc2);
 
-            _CatDesc3 = new Item("Bkr Protection", "Bkr Relay", "GroupDescription");
+            _CatDesc3 = new Item("Bkr Protection", "CB", "DeviceType");
             _CatDesc3.IsChecked = true;
             if (_CatDesc3.IsChecked) qFilters.Add(_CatDesc3);
 
-            _CatDesc4 = new Item("Line Protection", "Line Relay", "GroupDescription");
-            _CatDesc4.IsChecked = true;
+            _CatDesc4 = new Item("Line Protection", "Line Relay", "DeviceType");
+            _CatDesc4.IsChecked = false;
             if (_CatDesc4.IsChecked) qFilters.Add(_CatDesc4);
 
-            _CatDesc5 = new Item("Shunt Reactor Protection", "Reactor Relay", "GroupDescription");
-            _CatDesc5.IsChecked = true;
+            _CatDesc5 = new Item("Shunt Reactor Protection", "Reactor Relay", "DeviceType");
+            _CatDesc5.IsChecked = false;
             if (_CatDesc5.IsChecked) qFilters.Add(_CatDesc5);
 
-            _CatDesc6 = new Item("C-Bank Protection", "C-Bank Relay", "GroupDescription");
-            _CatDesc6.IsChecked = true;
+            _CatDesc6 = new Item("C-Bank Protection", "C-Bank Relay", "DeviceType");
+            _CatDesc6.IsChecked = false;
             if (_CatDesc6.IsChecked) qFilters.Add(_CatDesc6);
 
-            _CatDesc7 = new Item("Bkr Status", "Bkr Status", "GroupDescription");
-            _CatDesc7.IsChecked = true;
-            if (_CatDesc3.IsChecked) qFilters.Add(_CatDesc7);
+            _CatDesc7 = new Item("Bkr Status", "Bkr Status", "DeviceType");
+            _CatDesc7.IsChecked = false;
+            if (_CatDesc7.IsChecked) qFilters.Add(_CatDesc7);
 
-            _CatDesc8 = new Item("Etc. Protection", "Etc. Relay", "GroupDescription");
+            _CatDesc8 = new Item("Etc. Protection", "Etc. Relay", "DeviceType");
             _CatDesc8.IsChecked = false;
-            if (_CatDesc3.IsChecked) qFilters.Add(_CatDesc8);
+            if (_CatDesc8.IsChecked) qFilters.Add(_CatDesc8);
         }
 
         private void InitTimeFiltering()
@@ -220,11 +223,12 @@ namespace Alarm4Rest_Viewer.CustControl
             {
 
                 // Adding AlarmListFields ComboBox items
-                foreach (var AlarmListField in RestAlarmsRepo.AlarmListFields)
-                {
-                    if (AlarmListField != null)
-                        _AlarmListFields.Add(new AlarmFieldModel { FieldName = AlarmListField.ToString() });
-                }
+                //foreach (var AlarmListField in RestAlarmsRepo.AlarmListFields)
+                //{
+                //    if (AlarmListField != null)
+                //        AlarmListFields.Add(new AlarmFieldModel { FieldName = AlarmListField.ToString() });
+                //}
+                //AlarmListFields = CollectionViewSource.GetDefaultView(m_AlarmListFields);
 
             }
         }
@@ -251,13 +255,12 @@ namespace Alarm4Rest_Viewer.CustControl
             //CustAlarmViewModel = null;
 
             int sortTemplate = Convert.ToInt32(txtSortTemplate);
-            RestAlarmsRepo.orderParseDeleg = sortOrderList.First(i => i.ID == sortTemplate);
+            RestAlarmsRepo.orderParseDeleg = FieldOrders.ToList();
+            //RestAlarmsRepo.orderParseDeleg = sortOrderList.First(i => i.ID == sortTemplate);
 
             RestAlarmsRepo.qDateTimeCondEnd = DateTime.Now;
 
             await RestAlarmsRepo.TGetQueryAlarmAct();
-
-            Console.WriteLine(RestAlarmsRepo.orderParseDeleg.ID);
         }
 
         /* WPF call method with 2 parameter*/
@@ -326,6 +329,10 @@ namespace Alarm4Rest_Viewer.CustControl
         }
         public async void onUserQuery()
         {
+            RestAlarmsRepo.orderParseDeleg = FieldOrders.ToList();
+            //RestAlarmsRepo.orderParseDeleg = sortOrderList.First(i => i.ID == sortTemplate);
+
+            RestAlarmsRepo.qDateTimeCondEnd = DateTime.Now;
 
             Console.WriteLine("Run Standard Query cmd");
 
@@ -334,12 +341,12 @@ namespace Alarm4Rest_Viewer.CustControl
                     group item by item.FieldName;
 
             // Preparing for New Database
-            //queryParseDeleg = FilterExpressionBuilder.GetExpression<RestorationAlarmList>(groupFields);
+            queryParseDeleg = FilterExpressionBuilder.GetExpression<RestorationAlarmLists>(groupFields);
 
             RestAlarmsRepo.filterParseDeleg = queryParseDeleg;
             //RestAlarmsRepo.qDateTimeCondEnd = DateTime.Now;
             await RestAlarmsRepo.TGetQueryAlarmAct();
-            //Console.WriteLine(queryParseDeleg.Body);
+            Console.WriteLine(queryParseDeleg.Body);
 
         }
 
@@ -366,6 +373,10 @@ namespace Alarm4Rest_Viewer.CustControl
             if ((string)Category == _CatDesc2.Name)
             {
                 AddRemoveProcess(ref _CatDesc2);
+            }
+            if ((string)Category == _CatDesc3.Name)
+            {
+                AddRemoveProcess(ref _CatDesc3);
             }
             else
             {
@@ -398,6 +409,22 @@ namespace Alarm4Rest_Viewer.CustControl
 
         void IDropTarget.DragOver(DropInfo dropInfo)
         {
+
+            if ((dropInfo.Data is AlarmFieldModel && dropInfo.TargetItem is AlarmFieldModel) ||
+                (dropInfo.Data is OrderFieldModel && dropInfo.TargetItem is OrderFieldModel)) 
+            {
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+                dropInfo.Effects = DragDropEffects.Move;
+            }
+
+            else if ((dropInfo.Data  != dropInfo.TargetItem ))
+            {
+                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+                dropInfo.Effects = DragDropEffects.Move;
+            }
+            //foreach(var field in m_AlarmListFields)
+            //    Console.WriteLine(field.FieldName.ToString());
+
             //if (dropInfo.Data is PupilViewModel && dropInfo.TargetItem is SchoolViewModel)
             //{
             //    dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
@@ -407,6 +434,27 @@ namespace Alarm4Rest_Viewer.CustControl
 
         void IDropTarget.Drop(DropInfo dropInfo)
         {
+            //if (dropInfo.Data is AlarmFieldModel && dropInfo.TargetItem is OrderFieldModel)
+            //{
+            //    //OrderFieldModel OrderField = (OrderFieldModel)dropInfo.TargetItem;
+            //    AlarmFieldModel Data = (AlarmFieldModel)dropInfo.Data;
+            //    OrderFieldModel Field = new OrderFieldModel { FieldName = Data.FieldName };
+            //    FieldOrders.Add(Field);
+            //    ((IList)dropInfo.DragInfo.SourceCollection).Remove(Data);
+            //}
+
+            //else if (dropInfo.Data is OrderFieldModel && dropInfo.TargetItem is AlarmFieldModel)
+            //{
+            //    //AlarmFieldModel AlarmField = (AlarmFieldModel)dropInfo.TargetItem;
+            //    OrderFieldModel Data = (OrderFieldModel)dropInfo.Data;
+            //    AlarmFieldModel Field = new AlarmFieldModel { FieldName = Data.FieldName };
+            //    AlarmListFields.Add(Field);
+            //    ((IList)dropInfo.DragInfo.SourceCollection).Remove(Data);
+            //}
+
+            //foreach (var field in FieldOrders)
+            //    Console.WriteLine(field.FieldName.ToString());
+
             //SchoolViewModel school = (SchoolViewModel)dropInfo.TargetItem;
             //PupilViewModel pupil = (PupilViewModel)dropInfo.Data;
             //school.Pupils.Add(pupil);

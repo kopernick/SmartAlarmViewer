@@ -22,7 +22,7 @@ namespace Alarm4Rest_Viewer.Services
 
                 if (filterParses.Count == 0) return null;
 
-                ParameterExpression pe = Expression.Parameter(typeof(T), "RestorationAlarm"); 
+                ParameterExpression pe = Expression.Parameter(typeof(T), "RestorationAlarmList"); 
 
                 Expression exp = null;
 
@@ -76,7 +76,7 @@ namespace Alarm4Rest_Viewer.Services
             Expression outerExp; //And between field
 
             outerExp = null;
-            ParameterExpression pe = Expression.Parameter(typeof(T), "RestorationAlarm");
+            ParameterExpression pe = Expression.Parameter(typeof(T), "RestorationAlarmList");
 
             try
             {

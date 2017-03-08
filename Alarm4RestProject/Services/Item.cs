@@ -18,22 +18,20 @@
             Value = value;
         }
         public Item(string value, string fieldName)
+            :this(value)
         {
-            Value = value;
             FieldName = fieldName;
         }
         public Item(string name, string value, string fieldName)
+            : this(value, fieldName)
         {
             Name = name;
-            Value = value;
-            FieldName = fieldName;
         }
 
         public Item(bool isChecked, string value, string fieldName)
+            :this(value, fieldName)
         {
             IsChecked = isChecked;
-            Value = value;
-            FieldName = fieldName;
         }
 
         public override string ToString()

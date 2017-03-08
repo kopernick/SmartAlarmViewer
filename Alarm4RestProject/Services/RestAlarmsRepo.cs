@@ -65,7 +65,7 @@ namespace Alarm4Rest_Viewer.Services
 
         //Global Filter Keyword
         public static Expression<Func<RestorationAlarmLists, bool>> filterParseDeleg;
-        public static SortItem orderParseDeleg;
+        public static List<OrderFieldModel> orderParseDeleg;
 
         //public static List<string> filter_Parse { get; set; }
 
@@ -284,7 +284,14 @@ namespace Alarm4Rest_Viewer.Services
 
         public static async Task<List<RestorationAlarmLists>> GetQueryAlarmsAsync()
         {
-            string[] sortOreder = orderParseDeleg.ToArray();
+
+            List<SortDescription> sortList = new List<SortDescription>();
+            foreach (var Item in orderParseDeleg)
+            {
+                if (Item.IsChecked)
+                    sortList.Add(new SortDescription(Item.FieldName, Item.IsOrderByAsc ? ListSortDirection.Ascending : ListSortDirection.Descending));
+            }
+
             IEnumerable<RestorationAlarmLists> Query;
 
             //Get one page
@@ -302,10 +309,13 @@ namespace Alarm4Rest_Viewer.Services
                             .ToListAsync();
             }
 
-
             var resultList = Query.BuildOrderBy(
-                                new SortDescription(sortOreder[0], ListSortDirection.Ascending),
-                                new SortDescription(sortOreder[1], ListSortDirection.Ascending));
+                                new SortDescription(sortList[0].PropertyName, sortList[0].Direction),
+                                new SortDescription(sortList[1].PropertyName, sortList[1].Direction));
+
+            //var resultList = Query.BuildOrderBy(
+            //                    new SortDescription(sortOreder[0], ListSortDirection.Ascending),
+            //                    new SortDescription(sortOreder[1], ListSortDirection.Ascending));
 
             queryAlarmCount = resultList.Count();
 
@@ -328,7 +338,13 @@ namespace Alarm4Rest_Viewer.Services
 
             DateTime inclusiveStart = GetQueryTimeCond();
 
-            string[] sortOreder = orderParseDeleg.ToArray();
+            List<SortDescription> sortList = new List<SortDescription>();
+            foreach (var Item in orderParseDeleg)
+            {
+                if (Item.IsChecked)
+                    sortList.Add(new SortDescription(Item.FieldName, Item.IsOrderByAsc ? ListSortDirection.Ascending : ListSortDirection.Descending));
+            }
+
             IEnumerable<RestorationAlarmLists> Query;
 
             //Get one page
@@ -348,12 +364,13 @@ namespace Alarm4Rest_Viewer.Services
                             .ToListAsync();
             }
 
+              Query = Query.BuildOrderBy(
+                                new SortDescription(sortList[0].PropertyName, sortList[0].Direction),
+                                new SortDescription(sortList[1].PropertyName, sortList[1].Direction));
 
-            var resultList = Query.BuildOrderBy(
-                                new SortDescription(sortOreder[0], ListSortDirection.Ascending),
-                                new SortDescription(sortOreder[1], ListSortDirection.Ascending));
+            // var resultList = Query; 
 
-            queryAlarmCount = resultList.Count();
+            queryAlarmCount = Query.Count();
 
             if (queryAlarmCount % pageSize == 0)
             {
@@ -363,7 +380,7 @@ namespace Alarm4Rest_Viewer.Services
             {
                 queryPageCount = (queryAlarmCount / pageSize) + 1;
             }
-            return resultList
+            return Query
                             .Skip((queryPageIndex - 1) * pageSize)
                             .Take(pageSize)
                             .ToList();
@@ -793,6 +810,7 @@ namespace Alarm4Rest_Viewer.Services
         //    return rule;
         //}
 
+
         public static event EventHandler<RestEventArgs> RestAlarmChanged;
         private static void onRestAlarmChanged(RestEventArgs arg)
         {
@@ -800,5 +818,6 @@ namespace Alarm4Rest_Viewer.Services
                 RestAlarmChanged(null, arg);
         }
     }
+
 
 }

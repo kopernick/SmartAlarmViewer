@@ -72,7 +72,7 @@ namespace Alarm4Rest_Viewer
 
             #region Initialize Sort Template menu
             InitSortOrderTemplate();
-            RestAlarmsRepo.orderParseDeleg = sortOrderList.First(i => i.ID == 1);
+            //RestAlarmsRepo.orderParseDeleg = sortOrderList.First(i => i.ID == 1);
             #endregion
 
             #region Initialize filter menu

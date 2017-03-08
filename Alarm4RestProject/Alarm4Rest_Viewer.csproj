@@ -91,7 +91,7 @@
       <DependentUpon>QueryAlarmsListView.xaml</DependentUpon>
     </Compile>
     <Compile Include="QueryAlarmLists\QueryAlarmsListViewModel.cs" />
-    <Compile Include="Services\AlarmFieldModel.cs" />
+    <Compile Include="Services\FieldModel.cs" />
     <Compile Include="Services\SortExpression.cs" />
     <Compile Include="Services\SortItem.cs" />
     <Compile Include="Services\TimeCondItem.cs" />

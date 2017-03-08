@@ -163,6 +163,11 @@
 
                 <DataGrid.Columns>
 
+                    <DataGridTextColumn Header="PkID"
+                                        Binding="{Binding PkAlarmListID}"
+                                        Width="SizetoHeader"
+                                        IsReadOnly="True"/>
+                    
                     <DataGridTextColumn Header="Time"
                                         Binding="{Binding DateTime}"
                                         IsReadOnly="True"/>
