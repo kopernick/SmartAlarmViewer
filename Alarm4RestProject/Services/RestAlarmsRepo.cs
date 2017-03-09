@@ -672,9 +672,9 @@ namespace Alarm4Rest_Viewer.Services
 
                         case "User":
                             inclusiveStart = qDateTimeCondStart;
-                            //qDateTimeCondEnd = qDateTimeCondEnd.AddDays(1);
                             break;
-                default: //All two year
+                        default: //All two year
+                            qDateTimeCondEnd = DateTime.Now;
                             inclusiveStart = qDateTimeCondEnd.AddYears(-2);
                             inclusiveStart = new DateTime(inclusiveStart.Year, 1, 1);
                             break;
