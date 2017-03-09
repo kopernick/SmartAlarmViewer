@@ -45,8 +45,8 @@ namespace Alarm4Rest_Viewer.CustControl
 
         //public ICollectionView AlarmListFields { get; private set; }
 
-        private ObservableCollection<OrderFieldModel> _FieldOrders;
-        public ObservableCollection<OrderFieldModel> FieldOrders
+        private ObservableCollection<SortFieldModel> _FieldOrders;
+        public ObservableCollection<SortFieldModel> FieldOrders
         {
             get { return _FieldOrders; }
             set
@@ -138,7 +138,7 @@ namespace Alarm4Rest_Viewer.CustControl
 
             RestAlarmsRepo.RestAlarmChanged += OnRestAlarmChanged;
             RestAlarmsRepo.qDateTimeCondItem = _Last2Weeks;
-            RestAlarmsRepo.orderParseDeleg = FieldOrders.ToList();
+            RestAlarmsRepo.sortParseDeleg = FieldOrders.ToList();
             //RestAlarmsRepo.orderParseDeleg = sortOrderList.First(i => i.ID == 1);
 
             RunUserQueryCmd = new RelayCommand(o => onUserQuery(), o => canUserQuery());
@@ -148,13 +148,13 @@ namespace Alarm4Rest_Viewer.CustControl
         private void InitSortOrderField()
         {
             AlarmListFields = new ObservableCollection<AlarmFieldModel>();
-            FieldOrders = new ObservableCollection<OrderFieldModel>();
+            FieldOrders = new ObservableCollection<SortFieldModel>();
 
             //Defual Order fields
-            FieldOrders.Add(new OrderFieldModel("DateTime", true, false));          //Defual First Order field
-            FieldOrders.Add(new OrderFieldModel("StationName", true, true));      //Defual Second Order field
-            FieldOrders.Add(new OrderFieldModel("DeviceType", false, true));
-            FieldOrders.Add(new OrderFieldModel("PointName", false, true));
+            FieldOrders.Add(new SortFieldModel("DateTime", true, false));          //Defual First Order field
+            FieldOrders.Add(new SortFieldModel("StationName", true, true));      //Defual Second Order field
+            FieldOrders.Add(new SortFieldModel("DeviceType", false, true));
+            FieldOrders.Add(new SortFieldModel("PointName", false, true));
 
 
         }
@@ -255,7 +255,7 @@ namespace Alarm4Rest_Viewer.CustControl
             //CustAlarmViewModel = null;
 
             int sortTemplate = Convert.ToInt32(txtSortTemplate);
-            RestAlarmsRepo.orderParseDeleg = FieldOrders.ToList();
+            RestAlarmsRepo.sortParseDeleg = FieldOrders.ToList();
             //RestAlarmsRepo.orderParseDeleg = sortOrderList.First(i => i.ID == sortTemplate);
 
             RestAlarmsRepo.qDateTimeCondEnd = DateTime.Now;
@@ -329,7 +329,7 @@ namespace Alarm4Rest_Viewer.CustControl
         }
         public async void onUserQuery()
         {
-            RestAlarmsRepo.orderParseDeleg = FieldOrders.ToList();
+            RestAlarmsRepo.sortParseDeleg = FieldOrders.ToList();
             //RestAlarmsRepo.orderParseDeleg = sortOrderList.First(i => i.ID == sortTemplate);
 
             RestAlarmsRepo.qDateTimeCondEnd = DateTime.Now;
@@ -410,18 +410,18 @@ namespace Alarm4Rest_Viewer.CustControl
         void IDropTarget.DragOver(DropInfo dropInfo)
         {
 
-            if ((dropInfo.Data is AlarmFieldModel && dropInfo.TargetItem is AlarmFieldModel) ||
-                (dropInfo.Data is OrderFieldModel && dropInfo.TargetItem is OrderFieldModel)) 
-            {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
-                dropInfo.Effects = DragDropEffects.Move;
-            }
+            //if ((dropInfo.Data is AlarmFieldModel && dropInfo.TargetItem is AlarmFieldModel) ||
+            //    (dropInfo.Data is SortFieldModel && dropInfo.TargetItem is SortFieldModel)) 
+            //{
+            //    dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+            //    dropInfo.Effects = DragDropEffects.Move;
+            //}
 
-            else if ((dropInfo.Data  != dropInfo.TargetItem ))
-            {
-                dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-                dropInfo.Effects = DragDropEffects.Move;
-            }
+            //else if ((dropInfo.Data  != dropInfo.TargetItem ))
+            //{
+            //    dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+            //    dropInfo.Effects = DragDropEffects.Move;
+            //}
             //foreach(var field in m_AlarmListFields)
             //    Console.WriteLine(field.FieldName.ToString());
 

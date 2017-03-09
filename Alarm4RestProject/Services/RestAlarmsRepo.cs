@@ -65,7 +65,7 @@ namespace Alarm4Rest_Viewer.Services
 
         //Global Filter Keyword
         public static Expression<Func<RestorationAlarmLists, bool>> filterParseDeleg;
-        public static List<OrderFieldModel> orderParseDeleg;
+        public static List<SortFieldModel> sortParseDeleg;
 
         //public static List<string> filter_Parse { get; set; }
 
@@ -90,7 +90,7 @@ namespace Alarm4Rest_Viewer.Services
             fDateTimeCondEnd = DateTime.Now;
 
             filterParseDeleg = null;
-            orderParseDeleg = null;
+            sortParseDeleg = null;
 
             LastAlarmRecIndex = 0;
             LastMaxAlarmRecIndex = 0;
@@ -286,7 +286,7 @@ namespace Alarm4Rest_Viewer.Services
         {
 
             List<SortDescription> sortList = new List<SortDescription>();
-            foreach (var Item in orderParseDeleg)
+            foreach (var Item in sortParseDeleg)
             {
                 if (Item.IsChecked)
                     sortList.Add(new SortDescription(Item.FieldName, Item.IsOrderByAsc ? ListSortDirection.Ascending : ListSortDirection.Descending));
@@ -339,7 +339,7 @@ namespace Alarm4Rest_Viewer.Services
             DateTime inclusiveStart = GetQueryTimeCond();
 
             List<SortDescription> sortList = new List<SortDescription>();
-            foreach (var Item in orderParseDeleg)
+            foreach (var Item in sortParseDeleg)
             {
                 if (Item.IsChecked)
                     sortList.Add(new SortDescription(Item.FieldName, Item.IsOrderByAsc ? ListSortDirection.Ascending : ListSortDirection.Descending));
@@ -531,7 +531,7 @@ namespace Alarm4Rest_Viewer.Services
             RestEventArgs arg = new RestEventArgs();
 
             //Test Raise read "LoadStationName"
-            if (orderParseDeleg == null) return;
+            if (sortParseDeleg == null) return;
             QueryAlarmListDump = await TGetQueryAlarmsAsync();
             if (QueryAlarmListDump.Count != 0)
             {
@@ -557,7 +557,7 @@ namespace Alarm4Rest_Viewer.Services
             RestEventArgs arg = new RestEventArgs();
 
             //Test Raise read "LoadStationName"
-            if (orderParseDeleg == null) return;
+            if (sortParseDeleg == null) return;
             QueryAlarmListDump = await GetQueryAlarmsAsync();
             if (QueryAlarmListDump.Count != 0)
             {

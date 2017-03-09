@@ -12,9 +12,9 @@ namespace Alarm4Rest_Viewer.Services
         public string FieldName  { get; set; }
     }
 
-    public class OrderFieldModel
+    public class SortFieldModel
     {
-        public OrderFieldModel(string fieldName, bool isCheck,bool isOrderByAsc)
+        public SortFieldModel(string fieldName, bool isCheck,bool isOrderByAsc)
         {
             FieldName = fieldName;
             IsChecked = isCheck;
