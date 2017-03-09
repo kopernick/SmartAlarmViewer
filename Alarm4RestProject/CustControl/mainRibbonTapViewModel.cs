@@ -131,7 +131,6 @@ namespace Alarm4Rest_Viewer.CustControl
         public mainRibbonTapViewModel()
         {
             //To Do ต้องประการที่เดียว
-            InitSortOrderTemplate();
             InitCategoryFiltering();
             InitTimeFiltering();
             InitSortOrderField();
@@ -157,12 +156,6 @@ namespace Alarm4Rest_Viewer.CustControl
             FieldOrders.Add(new SortFieldModel("PointName", false, true));
 
 
-        }
-        private void InitSortOrderTemplate()
-        {
-            sortOrderList.Add(new SortItem(1, "StationName", "DateTime", "Priority"));
-            sortOrderList.Add(new SortItem(2, "StationName", "Priority", "DateTime"));
-            sortOrderList.Add(new SortItem(3, "DateTime", "StationName", "Priority"));
         }
 
         private void InitCategoryFiltering()
@@ -331,8 +324,6 @@ namespace Alarm4Rest_Viewer.CustControl
         {
             RestAlarmsRepo.sortParseDeleg = FieldOrders.ToList();
             //RestAlarmsRepo.orderParseDeleg = sortOrderList.First(i => i.ID == sortTemplate);
-
-            RestAlarmsRepo.qDateTimeCondEnd = DateTime.Now;
 
             Console.WriteLine("Run Standard Query cmd");
 

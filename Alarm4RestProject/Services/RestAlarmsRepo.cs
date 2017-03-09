@@ -13,7 +13,7 @@ using System.ComponentModel;
 
 namespace Alarm4Rest_Viewer.Services
 {
-     public static class RestAlarmsRepo //Ultilities Class
+    public static class RestAlarmsRepo //Ultilities Class
     {
         #region Properties
         //public static Alarm4RestorationContext DBContext;
@@ -36,7 +36,7 @@ namespace Alarm4Rest_Viewer.Services
         public static int PreviousAlarmRecIndex { get; private set; }
         public static int startNewRestItemArray { get; private set; }
         public static RestorationAlarmLists maxPkRecIndex { get; private set; }
-        public static List<string> AlarmListFields { get; private  set; }
+        public static List<string> AlarmListFields { get; private set; }
         public static int restAlarmCount { get; private set; }
 
         public static int startNewCustItemArray { get; private set; }
@@ -108,7 +108,7 @@ namespace Alarm4Rest_Viewer.Services
         {
             RestEventArgs arg = new RestEventArgs();
 
-           try
+            try
             {
                 RestAlarmListDump = await GetRestAlarmsAsync();
                 if (RestAlarmListDump.Count != 0)
@@ -117,7 +117,7 @@ namespace Alarm4Rest_Viewer.Services
                 LastMaxAlarmRecIndex = LastAlarmRecIndex;
 
                 QueryAlarmListDump = await TGetQueryAlarmsAsync();
-                if(QueryAlarmListDump.Count != 0)
+                if (QueryAlarmListDump.Count != 0)
                     LastQueryAlarmRecIndex = QueryAlarmListDump[0].PkAlarmListID;
 
                 StationsName = await GetStationNameAsync();
@@ -166,7 +166,7 @@ namespace Alarm4Rest_Viewer.Services
         public static async Task<List<string>> GetStationNameAsync()
         {
             return await DBContext.Station
-                .Select(x=>x.StationName)
+                .Select(x => x.StationName)
                 .ToListAsync<string>();
         }
 
@@ -200,7 +200,7 @@ namespace Alarm4Rest_Viewer.Services
                 .Distinct()
                 .ToListAsync<string>();
         }
-        
+
 
         public static async Task<List<RestorationAlarmLists>> GetRestAlarmsAsync()
         {
@@ -213,11 +213,11 @@ namespace Alarm4Rest_Viewer.Services
             if (restAlarmCount % pageSize == 0)
             {
                 RestPageCount = (restAlarmCount / pageSize);
-            }else
-            { 
+            } else
+            {
                 RestPageCount = (restAlarmCount / pageSize) + 1;
             }
-            
+
             //Get one page
             return await DBContext.RestorationAlarmList
                             .OrderByDescending(c => c.PkAlarmListID)
@@ -338,13 +338,6 @@ namespace Alarm4Rest_Viewer.Services
 
             DateTime inclusiveStart = GetQueryTimeCond();
 
-            List<SortDescription> sortList = new List<SortDescription>();
-            foreach (var Item in sortParseDeleg)
-            {
-                if (Item.IsChecked)
-                    sortList.Add(new SortDescription(Item.FieldName, Item.IsOrderByAsc ? ListSortDirection.Ascending : ListSortDirection.Descending));
-            }
-
             IEnumerable<RestorationAlarmLists> Query;
 
             //Get one page
@@ -364,13 +357,50 @@ namespace Alarm4Rest_Viewer.Services
                             .ToListAsync();
             }
 
-              Query = Query.BuildOrderBy(
-                                new SortDescription(sortList[0].PropertyName, sortList[0].Direction),
-                                new SortDescription(sortList[1].PropertyName, sortList[1].Direction));
 
-            // var resultList = Query; 
+            /***************** 8/8/2560 : อันนี้ใช้เวลคิด 1 คืนแลย *****************/
 
-            queryAlarmCount = Query.Count();
+            List<SortDescription> sortList = new List<SortDescription>();
+            foreach (var sortItem in sortParseDeleg)
+            {
+                if (sortItem.IsChecked)
+                    sortList.Add(new SortDescription(sortItem.FieldName, sortItem.IsOrderByAsc ? ListSortDirection.Ascending : ListSortDirection.Descending));
+            }
+
+            var mapping = new Dictionary<string, Func<RestorationAlarmLists, object>>()
+                {
+                    { "DateTime", al => al.DateTime },
+                    { "StationName" , al => al.StationName },
+                    { "PointName", al => al.PointName },
+                    { "MACName", al => al.MACName },
+                    { "ShortName", al => al.ShortName },
+                    { "Priority", al => al.Priority },
+                    { "DeviceType", al => al.DeviceType },
+                    { "DeviceID", al => al.DeviceID },
+                    { "Message", al => al.Message },
+                    { "PointType", al => al.PointType },
+                    { "SourceName", al => al.SourceName },
+                    { "PkAlarmListID", al => al.PkAlarmListID }
+                };
+
+
+                IOrderedEnumerable<RestorationAlarmLists> ResultList = null;
+
+                if (sortList[0].Direction == ListSortDirection.Descending)
+                    ResultList = Query.OrderByDescending(mapping[sortList[0].PropertyName.ToString()]);
+                else
+                    ResultList = Query.OrderBy(mapping[sortList[0].PropertyName.ToString()]) ;
+
+                foreach (var sort in sortList.Skip(1))
+                {
+                    if (sort.Direction == ListSortDirection.Descending)
+                        ResultList = ResultList.ThenByDescending(mapping[sort.PropertyName.ToString()]) ;
+                    else
+                        ResultList = ResultList.ThenBy(mapping[sort.PropertyName.ToString()]) ;
+                }
+
+
+            queryAlarmCount = ResultList.Count();
 
             if (queryAlarmCount % pageSize == 0)
             {
@@ -380,7 +410,7 @@ namespace Alarm4Rest_Viewer.Services
             {
                 queryPageCount = (queryAlarmCount / pageSize) + 1;
             }
-            return Query
+            return ResultList
                             .Skip((queryPageIndex - 1) * pageSize)
                             .Take(pageSize)
                             .ToList();

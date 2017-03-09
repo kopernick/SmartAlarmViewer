@@ -7,6 +7,7 @@ using Alarm4Rest_Viewer.RestAlarmLists;
 using System.Windows.Input;
 using Alarm4Rest_Viewer.QueryAlarmLists;
 using System.Windows.Controls.Ribbon;
+using System.Collections.ObjectModel;
 
 namespace Alarm4Rest_Viewer
 {
@@ -38,8 +39,21 @@ namespace Alarm4Rest_Viewer
         }
 
         #region Sorting Templat
-        public static List<SortItem> sortOrderList = new List<SortItem>();
-        public SortItem orderParseDeleg;
+
+        //-----------------------------------SortFiel Items----------------------------------//
+
+        private ObservableCollection<SortFieldModel> _FieldOrders;
+        public ObservableCollection<SortFieldModel> FieldOrders
+        {
+            get { return _FieldOrders; }
+            set
+            {
+                _FieldOrders = value;
+                OnPropertyChanged("FieldOrders");
+            }
+        }
+        //public static List<SortItem> sortOrderList = new List<SortItem>();
+        //public SortItem orderParseDeleg;
         #endregion
 
         #region Filter Properties
@@ -70,17 +84,19 @@ namespace Alarm4Rest_Viewer
 
             SetPageSize = new RelayCommand(o => onSetPageSize(), o => canSetPageSize());
 
-            #region Initialize Sort Template menu
-            InitSortOrderTemplate();
-            //RestAlarmsRepo.orderParseDeleg = sortOrderList.First(i => i.ID == 1);
+            #region Initialize Sort menu
+
+            InitSortOrderField();
+            RestAlarmsRepo.sortParseDeleg = FieldOrders.ToList();
+
             #endregion
 
             #region Initialize filter menu
-            
+
             #endregion
 
             #region Initialize Search menu
-            
+
             #endregion
         }
 
@@ -111,22 +127,27 @@ namespace Alarm4Rest_Viewer
         #endregion
 
         #region Sort Template Helper function
-        public static void InitSortOrderTemplate()
+        private void InitSortOrderField()
         {
-            sortOrderList.Add(new SortItem(1, "StationName", "DateTime", "Priority"));
-            sortOrderList.Add(new SortItem(2, "StationName", "Priority", "DateTime"));
-            sortOrderList.Add(new SortItem(3, "DateTime", "StationName", "Priority"));
-        }
+            FieldOrders = new ObservableCollection<SortFieldModel>();
 
+            //Defual Order fields
+            FieldOrders.Add(new SortFieldModel("DateTime", true, false));          //Defual First Order field
+            FieldOrders.Add(new SortFieldModel("StationName", true, true));      //Defual Second Order field
+            FieldOrders.Add(new SortFieldModel("DeviceType", false, true));
+            FieldOrders.Add(new SortFieldModel("PointName", false, true));
+
+
+        }
 
         #endregion
 
         #region Filter Helper function
-        
+
         #endregion
 
         #region Search Helper function
-       
+
         #endregion
 
 

@@ -368,7 +368,7 @@
 
                             <RibbonRadioButton GroupName="stdTime" Label="All" Grid.Row="1" Grid.Column="2" Margin="5,1,5,1"
                                 Command="{Binding RunQueryTimeCondCmd}"
-                                         IsChecked="{Binding EveryDays.IsChecke, Mode=TwoWay}">
+                                         IsChecked="{Binding EveryDays.IsChecked, Mode=TwoWay}">
                                 
                             </RibbonRadioButton>
                         </Grid>
